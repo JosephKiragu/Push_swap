@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 struct stack_node
 {
@@ -114,32 +115,179 @@ void reverse_rotate(struct stack_node **stack)
 	free(current->next);
 	current->next = NULL;
 	// free(current);
-	printf("Last value is = %d\n", data);
+	// printf("Last value is = %d\n", data);
 
 	push(stack, data);
 }
+
+void double_print(struct stack_node *a, struct stack_node *b)
+{
+   while(a != NULL && b != NULL)
+   {
+       printf("%d\t%d\n", a->data, b->data);
+       a = a->next;
+       b = b->next;
+   }
+   if (a != NULL)
+    {
+        while(a != NULL)
+            {
+                printf("%d\t\n", a->data);
+                a = a-> next;
+            }
+    }
+    else if (b != NULL)
+    {
+        while (b != NULL)
+        {
+            printf("\t%d\n", b->data);
+            b = b-> next;
+        }
+    }
+    printf("_\t_\na\tb\n");
+}
+
+void push_b(struct stack_node **a, struct stack_node **b)
+{
+    struct stack_node *current;
+    int data;
+
+    current = *a;
+    if (a == NULL)
+        return ; 
+    data = current->data;
+    pop(a);    
+    push(b, data);
+}
+
+void push_a(struct stack_node **b, struct stack_node **a)
+{
+    struct  stack_node *current;
+    int     data;
+
+    current = *b;
+    if (b == NULL)
+        return ;
+    data = current->data;
+    pop(b);
+    push(a, data);
+}
+
+int getStackSize(struct stack_node **stack)
+{
+    struct  stack_node *current;
+    int     counter;
+    
+    current = *stack;
+    counter = 0;
+    if (current == NULL)
+        return 1;
+    while(current != NULL)
+    {
+        current = current->next;
+        counter++;
+    }
+    printf("Size = %d\n", counter);
+    return counter;
+}
+
+bool sorted(struct stack_node **stack)
+{
+    struct  stack_node *current;
+    int     temp;
+
+    current = *stack;
+    if (current == NULL)
+        return 1;
+    temp = current->data;
+    while (current!= NULL && (current->next) != NULL)
+    {
+        if ((current->data) > (current->next->data))
+        {
+            // printf("NOT IN ORDER\n");
+            return false;
+        }
+        current = current->next;
+    }
+    // printf("SORTED\n");
+    return true;
+}
+
+int getFirstValue(struct stack_node **stack)
+{
+    struct  stack_node *current;
+    int     value;
+
+    current = *stack;
+    value = current->data;
+    // printf("Value = %d\n", value);
+    return value;
+
+}
+
+int getLastValue(struct stack_node **stack)
+{
+    struct  stack_node *current;
+    int     value;
+
+    current = *stack;
+    while(current->next!= NULL)
+        current = current->next;
+    value = current->data;
+    // printf("Value = %d\n", value);
+    return value;
+}
+
+
 
 
 
 int main()
 {
-    struct stack_node *stack = NULL;
+    struct stack_node *a = NULL;
+    struct stack_node *b = NULL;
 
-    push(&stack, 5);
-    push(&stack, 11);
-    push(&stack, 13);
-    push(&stack, 15);
-    // pop(&stack);
-    printf("Printing stack\n");
-    print_stack(stack);
-    printf("Swapping first two elements of stack\n");
-    swap(stack);
-    print_stack(stack);
-    printf("Rotating stack\n");
-    rotate(&stack);
-	print_stack(stack);
-	printf("Reverse Rotate \n");
-    reverse_rotate(&stack);
-	print_stack(stack);
+    push(&a, 7);
+    push(&a, 6);
+    push(&a, 5);
+    // push(&a, 4);
+    // push(&a, 2);
+    // push(&b, 9);
+    // push(&b, 20);
+    // push(&b, 21);
     
+    // printf("Printing stack\n");
+    // double_print(a, b);
+    // printf("________________________\n");
+    // printf("Exec sa\n");
+    // swap(a);
+    // double_print(a, b);
+    // printf("________________________\n");
+    // printf("Exec ra\n");
+    // rotate(&a);
+	// double_print(a, b);
+    // printf("________________________\n");
+	// printf("Exec rra \n");
+    // reverse_rotate(&a);
+	// double_print(a, b);
+    // double_print(a, b);
+    // printf("________________________\n");
+    // printf("Exec pa \n");
+    // push_b(&a, &b);
+    // double_print(a, b);
+    // printf("________________________\n");
+    // printf("Exec pb \n");
+    // push_a(&b, &a);
+    // double_print(a, b);
+    // printf("________________________\n");
+    // sorted(&a);
+    // double_print(a, b);
+    // printf("________________________\n");
+    // getFirstValue(&a);
+    // double_print(a, b);
+    // printf("________________________\n");
+    // getLastValue(&a);
+    // double_print(a, b);
+    // printf("________________________\n");
+    // getStackSize(&a);
 }

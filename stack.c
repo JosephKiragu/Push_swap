@@ -74,44 +74,48 @@ void print_stack(struct stack_node *stack)
     }
 }
 
-void swap_a(struct stack_node *stack)
+void swap(struct stack_node *head)
 {
-    int data;
-    // struct stack_node *current;
-    
-    // current = stack;
-    if (stack == NULL || stack->next == NULL)
-        return ;
-    data = stack->next->data;
-    free(stack->next);
-    stack->next = stack->next->next;
-    printf("The first element =%d\n second = %d\n", stack->data, stack->next->data);
-    push(&stack, data);
-    // struct stack_node *first = malloc(sizeof(struct stack_node));
-    // first->data = data;
-    // first->next = current;
-    // current = first;
-    // print_stack(stack);
-    //  stack = current;
+	struct stack_node *current;
+	int temp;
+
+	if(head == NULL && head->next == NULL)
+		return ;
+	current = head;
+	temp = current-> data;
+	current->data = current->next->data;
+	current->next->data = temp;
+	
 }
 
-void rotate_a(struct stack_node *stack)
+void rotate(struct stack_node **stack)
 {
-    struct  stack_node *current;
-    int     data;
+	struct stack_node *node = *stack;
+	int data;
 
-    current = stack;
-    // if (stack == NULL)
-    //     return ;
-    // data = current->data;
-    // pop(&current);
-    add_last(stack, 7);
-    
-    // current->next = malloc(sizeof(struct stack_node));
-    // current->next->data = data;
-    // current->next->next = NULL;
-    // printf("last element = %d\n", current->next->data);
-    
+
+	data = node->data;
+	*stack = node->next;
+	free(node);
+	add_last(*stack,data);
+}
+
+void reverse_rotate(struct stack_node **stack)
+{
+	struct stack_node *current;
+	struct stack_node *first;
+	int data;
+
+	current = *stack;
+	while(current->next->next != NULL)
+		current = current->next;
+	data = current->next->data;
+	free(current->next);
+	current->next = NULL;
+	// free(current);
+	printf("Last value is = %d\n", data);
+
+	push(stack, data);
 }
 
 
@@ -128,9 +132,13 @@ int main()
     printf("Printing stack\n");
     print_stack(stack);
     printf("Swapping first two elements of stack\n");
-    swap_a(stack);
+    swap(stack);
     print_stack(stack);
     printf("Rotating stack\n");
-    // rotate_a(stack);
+    rotate(&stack);
+	print_stack(stack);
+	printf("Reverse Rotate \n");
+    reverse_rotate(&stack);
+	print_stack(stack);
     
 }

@@ -56,6 +56,7 @@ void push(struct stack_node **top, int data)
     node->data = data;
     node->next = *top;
     *top = node;
+	
 }
 
 void pop(struct stack_node **top)

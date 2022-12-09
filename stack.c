@@ -187,7 +187,7 @@ int getStackSize(struct stack_node **stack)
         current = current->next;
         counter++;
     }
-    printf("Size = %d\n", counter);
+    // printf("Size = %d\n", counter);
     return counter;
 }
 
@@ -219,6 +219,8 @@ int getFirstValue(struct stack_node **stack)
     int     value;
 
     current = *stack;
+	if(current == NULL)
+		return 1;
     value = current->data;
     // printf("Value = %d\n", value);
     return value;
@@ -231,11 +233,118 @@ int getLastValue(struct stack_node **stack)
     int     value;
 
     current = *stack;
+	if(current == NULL)
+		return 1;
     while(current->next!= NULL)
         current = current->next;
     value = current->data;
     // printf("Value = %d\n", value);
     return value;
+}
+
+int getSecondValue(struct stack_node **stack)
+{
+	struct	stack_node *current;
+	int		value;
+
+	current = *stack;
+	if(current == NULL)
+		return 1;
+	value = current->next->data;
+	// printf("Value = %d\n",value);
+	return value;
+}
+
+int getHighest(struct stack_node **stack)
+{
+	struct stack_node *current;
+	int		highest;
+
+	current = *stack;
+	if (current == NULL)
+		return 1;
+	highest = current->data;
+	while(current != NULL)
+	{
+		if (current->data > highest)
+			highest = current->data;
+		current = current->next;
+	}
+	// printf("Highest = %d\n", highest);
+	return highest;
+}
+
+int getLowest(struct stack_node **stack)
+{
+	struct	stack_node *current;
+	int		lowest;
+
+	current = *stack;
+	if(current == NULL)
+		return 1;
+	lowest = current->data;
+	while(current != NULL)
+	{
+		if (current->data < lowest)
+			lowest = current->data;
+		current = current->next;
+	}
+	// printf("Lowest = %d\n", lowest);
+	return lowest;
+}
+
+void sortThree(struct stack_node **stack)
+{
+	if (getStackSize(stack) != 3 || sorted(stack) == true)
+		return ;
+	if (getLastValue(stack) == getHighest(stack))
+	{
+		if (getSecondValue(stack) == getLowest(stack))
+		{
+			swap(*stack);
+			printf("ra\n");
+			return ;
+		}
+	}
+	else if (getFirstValue(stack) == getHighest(stack))
+	{
+		if (getLastValue(stack) == getLowest(stack))
+		{
+			rotate(stack);
+			swap(*stack);
+			printf("ra\tsa\n");
+			return ;
+		}
+	}
+	else if(getFirstValue(stack) == getLowest(stack))
+	{
+		if (getSecondValue(stack) == getHighest(stack))
+		{
+			reverse_rotate(stack);
+			swap(*stack);
+			printf("rra\tsa\n");
+			return;
+		}
+	}
+	if(getSecondValue(stack) == getHighest(stack))
+	{
+		if (getLastValue(stack) == getLowest(stack))
+		{
+			reverse_rotate(stack);
+			printf("rra\n");
+			return ;
+		}
+	}
+	if (getFirstValue(stack) == getHighest(stack))
+	{
+		if (getSecondValue(stack) == getLowest(stack))
+		{
+			rotate(stack);
+			printf("ra\n");
+			return ;
+		}
+	}
+	
 }
 
 
@@ -247,9 +356,9 @@ int main()
     struct stack_node *a = NULL;
     struct stack_node *b = NULL;
 
-    push(&a, 7);
-    push(&a, 6);
-    push(&a, 5);
+    push(&a, 1);
+    push(&a, 3);
+    push(&a, 2);
     // push(&a, 4);
     // push(&a, 2);
     // push(&b, 9);
@@ -290,4 +399,17 @@ int main()
     // double_print(a, b);
     // printf("________________________\n");
     // getStackSize(&a);
+	// double_print(a, b);
+    // printf("________________________\n");
+	// getHighest(&a);
+	// double_print(a, b);
+    // printf("________________________\n");
+	// getLowest(&a);
+	// double_print(a, b);
+    // printf("________________________\n");
+	// getSecondValue(&a);
+	double_print(a, b);
+    printf("________________________\n");
+	sortThree(&a);
+	double_print(a, b);
 }

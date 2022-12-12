@@ -218,6 +218,28 @@ bool sorted(struct stack_node **stack)
     return true;
 }
 
+bool reverseSorted(struct stack_node **stack)
+{
+    struct  stack_node *current;
+    int     temp;
+
+    current = *stack;
+    if (current == NULL)
+        return 1;
+    temp = current->data;
+    while (current!= NULL && (current->next) != NULL)
+    {
+        if ((current->data) < (current->next->data))
+        {
+            // printf("NOT IN ORDER\n");
+            return false;
+        }
+        current = current->next;
+    }
+    // printf("REVERSE SORTED\n");
+    return true;
+}
+
 int getFirstValue(struct stack_node **stack)
 {
     struct  stack_node *current;
@@ -412,6 +434,101 @@ void sortFive(struct stack_node **a, struct stack_node **b)
 	printf("\n");				
 }
 
+void reverseSortThree(struct stack_node **stack)
+{
+	if (getStackSize(stack) != 3 || reverseSorted(stack) == true)
+		return ;
+	if (getLastValue(stack) == getHighest(stack))
+	{
+		if (getSecondValue(stack) == getLowest(stack))
+		{
+			reverse_rotate(stack);
+			printf("rrb\t");
+			return ;
+		}
+	}
+	else if (getFirstValue(stack) == getLowest(stack))
+	{
+		if (getLastValue(stack) == getHighest(stack))
+		{
+			reverse_rotate(stack);
+			swap(*stack);
+			printf("rrb\tsb\t");
+			return ;
+		}
+	}
+	else if(getFirstValue(stack) == getLowest(stack))
+	{
+		if (getSecondValue(stack) == getHighest(stack))
+		{
+			rotate(stack);
+			printf("rb\t");
+			return;
+		}
+	}
+	if(getSecondValue(stack) == getHighest(stack))
+	{
+		if (getLastValue(stack) == getLowest(stack))
+		{
+			swap(*stack);
+			printf("sb\t");
+			return ;
+		}
+	}
+	if (getFirstValue(stack) == getHighest(stack))
+	{
+		if (getSecondValue(stack) == getLowest(stack))
+		{
+			reverse_rotate(stack);
+			swap(*stack);
+			printf("rrb\t");
+			return ;
+		}
+	}
+	
+}
+
+
+void reverseSortFive(struct stack_node **a, struct stack_node **b)
+{
+	int		counter;
+
+	counter = 2;
+	if (getStackSize(b) != 5 || reverseSorted(b) == true)
+		return ;
+
+	while (getStackSize(b) != 3)
+	{
+		while(getHighest(b) != getFirstValue(b))
+		{
+			if (getIndexPosition(b, getHighest(b)) > 3)
+			{
+				printf("rrb\t");
+				reverse_rotate(b);
+			}
+			else
+			{
+				printf("rb\t");
+				rotate(b);
+			}
+
+		}
+		if (getHighest(b) == getFirstValue(b))
+		{
+			printf("pa\t");
+			push_a(b, a);
+		}
+	}
+	reverseSortThree(b);
+	
+	while (counter-- != 0)
+	{
+		printf("pb\t");
+		push_b(a, b);
+	}
+	printf("\n");				
+}
+
 
 
 
@@ -422,14 +539,16 @@ int main()
     struct stack_node *a = NULL;
     struct stack_node *b = NULL;
 
-    push(&a, 3);
-    push(&a, 4);
+    push(&a, 1);
     push(&a, 2);
+    push(&a, 3);
     push(&a, 5);
-    // push(&a, 1);
-    // push(&b, 9);
-    // push(&b, 20);
-    // push(&b, 21);
+    push(&a, 1);
+    push(&b, 9);
+    push(&b, 20);
+    push(&b, 21);
+	push(&b, 12);
+    push(&b, 24);
     
     // printf("Printing stack\n");
     // double_print(a, b);
@@ -484,7 +603,10 @@ int main()
     // printf("________________________\n");
 	// sortFive(&a, &b);
 	// double_print(a, b);
+    // printf("________________________\n");
+	// reverseSortThree(&b);
 	double_print(a, b);
-    printf("________________________\n");
+	printf("________________________\n");
+	reverseSortFive(&a, &b);
 	double_print(a, b);
 }

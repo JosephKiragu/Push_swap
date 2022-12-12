@@ -62,6 +62,8 @@ void push(struct stack_node **top, int data)
 
 void pop(struct stack_node **top)
 {
+	if (*top == NULL)
+		return ;
     struct stack_node *node = *top;
     *top = node->next;
     free(node);
@@ -95,7 +97,8 @@ void rotate(struct stack_node **stack)
 	struct stack_node *node = *stack;
 	int data;
 
-
+	if (node == NULL)
+		return ;
 	data = node->data;
 	*stack = node->next;
 	free(node);
@@ -109,6 +112,8 @@ void reverse_rotate(struct stack_node **stack)
 	int data;
 
 	current = *stack;
+	if (current == NULL)
+		return ;
 	while(current->next->next != NULL)
 		current = current->next;
 	data = current->next->data;
@@ -153,7 +158,7 @@ void push_b(struct stack_node **a, struct stack_node **b)
     int data;
 
     current = *a;
-    if (a == NULL)
+    if (*a == NULL)
         return ; 
     data = current->data;
     pop(a);    
@@ -166,7 +171,7 @@ void push_a(struct stack_node **b, struct stack_node **a)
     int     data;
 
     current = *b;
-    if (b == NULL)
+    if (*b == NULL)
         return ;
     data = current->data;
     pop(b);
@@ -302,7 +307,7 @@ void sortThree(struct stack_node **stack)
 		if (getSecondValue(stack) == getLowest(stack))
 		{
 			swap(*stack);
-			printf("ra\n");
+			printf("ra\t");
 			return ;
 		}
 	}
@@ -312,7 +317,7 @@ void sortThree(struct stack_node **stack)
 		{
 			rotate(stack);
 			swap(*stack);
-			printf("ra\tsa\n");
+			printf("ra\tsa\t");
 			return ;
 		}
 	}
@@ -322,7 +327,7 @@ void sortThree(struct stack_node **stack)
 		{
 			reverse_rotate(stack);
 			swap(*stack);
-			printf("rra\tsa\n");
+			printf("rra\tsa\t");
 			return;
 		}
 	}
@@ -331,7 +336,7 @@ void sortThree(struct stack_node **stack)
 		if (getLastValue(stack) == getLowest(stack))
 		{
 			reverse_rotate(stack);
-			printf("rra\n");
+			printf("rra\t");
 			return ;
 		}
 	}
@@ -340,12 +345,73 @@ void sortThree(struct stack_node **stack)
 		if (getSecondValue(stack) == getLowest(stack))
 		{
 			rotate(stack);
-			printf("ra\n");
+			printf("ra\t");
 			return ;
 		}
 	}
 	
 }
+
+int getIndexPosition(struct stack_node **stack, int value)
+{
+	struct	stack_node *current;
+	int		counter;
+
+	current = *stack;
+	counter = 1;
+	if (current == NULL)
+		return 1;
+	while(current!= NULL)
+	{
+		if (current->data == value)
+		{
+			// printf("Index = %d\n", counter);
+			return counter;
+		}
+		counter++;
+		current = current->next;
+	}
+	return 1;
+
+}
+
+void sortFive(struct stack_node **a, struct stack_node **b)
+{
+	if (getStackSize(a) != 5 || *b != NULL || sorted(a) == true)
+		return ;
+
+	while (getStackSize(a) != 3)
+	{
+		while(getLowest(a) != getFirstValue(a))
+		{
+			if (getIndexPosition(a, getLowest(a)) > 3)
+			{
+				printf("rra\t");
+				reverse_rotate(a);
+			}
+			else
+			{
+				printf("ra\t");
+				rotate(a);
+			}
+
+		}
+		if (getLowest(a) == getFirstValue(a))
+		{
+			printf("pb\t");
+			push_b(a, b);
+		}
+	}
+	sortThree(a);
+	int test = 2;
+	while (*b != NULL)
+	{
+		printf("pa\t");
+		push_a(b, a);
+	}
+	printf("\n");				
+}
+
 
 
 
@@ -356,11 +422,11 @@ int main()
     struct stack_node *a = NULL;
     struct stack_node *b = NULL;
 
-    push(&a, 1);
     push(&a, 3);
+    push(&a, 4);
     push(&a, 2);
-    // push(&a, 4);
-    // push(&a, 2);
+    push(&a, 5);
+    // push(&a, 1);
     // push(&b, 9);
     // push(&b, 20);
     // push(&b, 21);
@@ -398,7 +464,7 @@ int main()
     // getLastValue(&a);
     // double_print(a, b);
     // printf("________________________\n");
-    // getStackSize(&a);
+    // getStackSize(&b);
 	// double_print(a, b);
     // printf("________________________\n");
 	// getHighest(&a);
@@ -408,8 +474,17 @@ int main()
 	// double_print(a, b);
     // printf("________________________\n");
 	// getSecondValue(&a);
+	// double_print(a, b);
+    // printf("________________________\n");
+	// sortThree(&a);
+	// double_print(a, b);
+	// printf("________________________\n");
+	// getIndexPosition(&a, 5);
+	// double_print(a, b);
+    // printf("________________________\n");
+	// sortFive(&a, &b);
+	// double_print(a, b);
 	double_print(a, b);
     printf("________________________\n");
-	sortThree(&a);
 	double_print(a, b);
 }

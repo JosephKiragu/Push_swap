@@ -281,7 +281,7 @@ int getSecondValue(struct stack_node **stack)
 	if(current == NULL)
 		return 1;
 	value = current->next->data;
-	// printf("Value = %d\n",value);
+	// printf("Second = %d\n",value);
 	return value;
 }
 
@@ -336,7 +336,7 @@ void sortThree(struct stack_node **stack)
 			return ;
 		}
 	}
-	else if (getFirstValue(stack) == getHighest(stack))
+	if (getFirstValue(stack) == getHighest(stack))
 	{
 		if (getLastValue(stack) == getLowest(stack))
 		{
@@ -346,7 +346,7 @@ void sortThree(struct stack_node **stack)
 			return ;
 		}
 	}
-	else if(getFirstValue(stack) == getLowest(stack))
+	if(getFirstValue(stack) == getLowest(stack))
 	{
 		if (getSecondValue(stack) == getHighest(stack))
 		{
@@ -450,20 +450,21 @@ void reverseSortThree(struct stack_node **stack)
 			return ;
 		}
 	}
-	else if (getFirstValue(stack) == getLowest(stack))
+	if (getFirstValue(stack) == getLowest(stack))
 	{
 		if (getLastValue(stack) == getHighest(stack))
 		{
-			reverse_rotate(stack);
+			rotate(stack);
 			swap(*stack);
-			printf("rrb\tsb\t");
+			printf("rb\tsb\t");
 			return ;
 		}
 	}
-	else if(getFirstValue(stack) == getLowest(stack))
+	if(getFirstValue(stack) == getLowest(stack))
 	{
 		if (getSecondValue(stack) == getHighest(stack))
 		{
+			
 			rotate(stack);
 			printf("rb\t");
 			return;
@@ -497,10 +498,10 @@ void reverseSortFive(struct stack_node **a, struct stack_node **b)
 	int		counter;
 
 	counter = 2;
-	if (getStackSize(b) != 5 || reverseSorted(b) == true)
+	if (getStackSize(a) != 5 || reverseSorted(b) == true)
 		return ;
 
-	while (getStackSize(b) != 3)
+	while (getStackSize(b) > 3)
 	{
 		while(getHighest(b) != getFirstValue(b))
 		{
@@ -585,62 +586,42 @@ int getMax(int *arr, int size)
 	return max;
 }
 
-
-
-int getNearest(struct stack_node **a, int arr[], int begin, int end)
+int *slice(int *arr, int start, int end)
 {
-	int value;
+	int i;
+	static int *output;
+
+	i = start;
+	output = malloc((end - start) * sizeof(int));
+
+	while (i < end)
+	{
+		output[i - start] = arr[i];
+		i++;
+	}
+	return output; //REMEMBER TO FREE THIS*/
+}
+
+void sortAscending(int*	arr, int size)
+{
 	int j;
-	int span;
-	int *row;
-	int counter;
+	int	k;
+	int temp;
 
-	int start;
-	
-	start = begin;
-	counter = 0;
-	while (start <= end)
+	j = 0;
+	k = 0;
+	for (int i = 0; i < size - 1; i ++)
 	{
-		if (getIndexPosition(a, arr[start]) != -1)
-			counter++;
-		start++;
-	}
-	j = counter;
-	start = begin;
-	// printf("Value of span = %d\n", counter);
-	
-	row = malloc(counter * sizeof(int));
-	int k = 0;
-	while(k < counter)
-	{
-		if (getIndexPosition(a, arr[start]) != -1)
+		for (int j = 0; j < size - i - 1; j++)
 		{
-			row[k] = getIndexPosition(a, arr[start]);
-			printf("(%d, %d),", getIndexPosition(a, arr[start]), row[k]);
+			if (arr[j] > arr[j + 1])
+			{
+				temp = arr[j];
+				arr[j] = arr[j + 1];
+				arr[j + 1] = temp;
+			}
 		}
-		start++;
-		k++;
 	}
-	printf("\n");
-	if (j > 0)
-	{
-		if (getMin(row, j) - 0 < getStackSize(a) - getMax(row, j))
-			value = getMin(row, j);
-		else
-			value = getMax(row, j);
-	}
-	if (j == 0)
-	{
-		printf("size of row = %d\n", j);
-		value = 1;
-	}
-		// value = row[0];
-	// value = getMin(row, j);
-
-	printf("size of row = %d\n", j);
-	printf("Value of Nearest index = %d\n", value);
-	free(row);
-	return value;
 }
 
 int *getIndexValue(struct stack_node **a, int index)
@@ -664,6 +645,70 @@ int *getIndexValue(struct stack_node **a, int index)
 	return value;
 }
 
+
+
+int *getNearestIndex(struct stack_node **a, int arr[], int begin, int end)
+{
+	int value;
+	int j;
+	int span;
+	int *row;
+	static int *values;
+	int counter;
+
+	int start;
+	
+	start = begin;
+	counter = 0;
+	while (start <= end)
+	{
+		if (getIndexPosition(a, arr[start]) != -1)
+			counter++;
+		start++;
+	}
+	j = counter;
+	start = begin;
+	// printf("Value of span = %d\n", counter);
+	
+	row = malloc(counter * sizeof(int));
+	values = malloc(counter * sizeof(int));
+	int k = 0;
+	while(k < counter)
+	{
+		if (getIndexPosition(a, arr[start]) != -1)
+		{
+			row[k] = getIndexPosition(a, arr[start]);
+			printf("(%d, %d),", getIndexPosition(a, arr[start]), row[k]);
+		}
+		start++;
+		k++;
+	}
+	printf("\n");
+	
+	k = 0;
+	sortAscending(row, j);
+	int q = 0;
+	while(q < j)
+	{
+		printf("%d ", row[q]);
+		q++;
+	}
+	printf("\n");
+	while (k < j)
+	{
+		values[k] = *getIndexValue(a, row[k]);
+		k++;
+	}
+	
+
+	
+
+	free(row);
+	return values;
+}
+
+
+
 void sortTen(struct stack_node **a, struct stack_node **b)
 {
 	int *arr;
@@ -682,40 +727,80 @@ void sortTen(struct stack_node **a, struct stack_node **b)
 	}
 
 	int k = 5;
-	int n = 7;
-	int value;
-	while(k <= n)
+	int n = 9;
+	int *row;
+	printf("\n");
+	row = getNearestIndex(a, arr, k, n);
+	int span = 0;
+	
+	while (span <= n - k)
 	{
-		value = getNearest(a, arr, k, n);
-		// if(getFirstValue(a) != *getIndexValue(a, value))
-		// {
-		// 	printf("Nearest = %d\n", value);
-		// 	printf("Value %d != index value %d\n", getFirstValue(a), *getIndexValue(a, value));
-		// 	return;
-		// }
-		if (getFirstValue(a) != *getIndexValue(a, value))
-		{
-			while(getFirstValue(a) != *getIndexValue(a, value))
+		while (getFirstValue(a) != row[span])
 			{
-				if (value < (getStackSize(a) / 2 + 1))
-				{
-					// printf("Here");
+				if (getIndexPosition(a, row[span]) - 1 < getStackSize(a) - getIndexPosition(a, row[span]))
 					rotate(a);
-				}
 				else
+				{
 					reverse_rotate(a);
+				}
+				
 			}
-		}
-		push_b(a, b);
-		// return ;
-		k++;
+			push_b(a, b);
+			span++;
+		
+	}
+	reverseSortFive(a, b);
+	span = 0;
+	while (span <= n - k)
+	{
+		push_a(b, a);
+		span++;
+	}
+
+
+	k = 0;
+	n = 4;
+	printf("\n");
+	row = getNearestIndex(a, arr, k, n);
+	span = 0;
+	while (span <= n - k)
+	{
+		while (getFirstValue(a) != row[span])
+			{
+				if (getIndexPosition(a, row[span]) - 1 < getStackSize(a) - getIndexPosition(a, row[span]))
+					rotate(a);
+				else
+				{
+					reverse_rotate(a);
+				}
+				
+			}
+			push_b(a, b);
+			span++;
+		
+	}
+
+	reverseSortFive(a, b);
+	span = 0;
+	while (span <= n - k)
+	{
+		push_a(b, a);
+		span++;
 	}
 
 
 
-	// getNearest(a, arr, 8, 9);
+
+
+
+	free(row);
+
+
+
+
+	// getNearestIndex(a, arr, 8, 9);
 	printf("\n");
-	// printf("XX value = %d\n", getNearest(a, arr, 5, 9));
+	// printf("XX value = %d\n", getNearestIndex(a, arr, 5, 9));
 }
 
 
@@ -735,6 +820,8 @@ int main()
 	push(&a, 21);
 	push(&a, 30);
 	push(&a, 0);
+	
+	
 	
 	double_print(a, b);
 	printf("________________________\n");

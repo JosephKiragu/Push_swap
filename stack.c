@@ -682,7 +682,7 @@ void sortTen(struct stack_node **a, struct stack_node **b)
 	}
 
 	int k = 5;
-	int n = 9;
+	int n = 7;
 	int value;
 	while(k <= n)
 	{
@@ -736,64 +736,6 @@ int main()
 	push(&a, 30);
 	push(&a, 0);
 	
-	// printf("Printing stack\n");
-	// double_print(a, b);
-	// printf("________________________\n");
-	// printf("Exec sa\n");
-	// swap(a);
-	// double_print(a, b);
-	// printf("________________________\n");
-	// printf("Exec ra\n");
-	// rotate(&a);
-	// double_print(a, b);
-	// printf("________________________\n");
-	// printf("Exec rra \n");
-	// reverse_rotate(&a);
-	// double_print(a, b);
-	// double_print(a, b);
-	// printf("________________________\n");
-	// printf("Exec pa \n");
-	// push_b(&a, &b);
-	// double_print(a, b);
-	// printf("________________________\n");
-	// printf("Exec pb \n");
-	// push_a(&b, &a);
-	// double_print(a, b);
-	// printf("________________________\n");
-	// sorted(&a);
-	// double_print(a, b);
-	// printf("________________________\n");
-	// getFirstValue(&a);
-	// double_print(a, b);
-	// printf("________________________\n");
-	// getLastValue(&a);
-	// double_print(a, b);
-	// printf("________________________\n");
-	// getStackSize(&b);
-	// double_print(a, b);
-	// printf("________________________\n");
-	// getHighest(&a);
-	// double_print(a, b);
-	// printf("________________________\n");
-	// getLowest(&a);
-	// double_print(a, b);
-	// printf("________________________\n");
-	// getSecondValue(&a);
-	// double_print(a, b);
-	// printf("________________________\n");
-	// sortThree(&a);
-	// double_print(a, b);
-	// printf("________________________\n");
-	// getIndexPosition(&a, 5);
-	// double_print(a, b);
-	// printf("________________________\n");
-	// sortFive(&a, &b);
-	// double_print(a, b);
-	// printf("________________________\n");
-	// reverseSortThree(&b);
-	// double_print(a, b);
-	// printf("________________________\n");
-	// reverseSortFive(&a, &b);
 	double_print(a, b);
 	printf("________________________\n");
 	sortTen(&a, &b);

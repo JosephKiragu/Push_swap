@@ -87,11 +87,15 @@ void print_stack(struct stack_node *stack)
 	}
 }
 
-void swap(struct stack_node *head, struct Counter* counter)
+void increment(struct Counter* c)
+{
+	c->value++;
+}
+
+void swap(struct stack_node *head, struct Counter* c)
 {
 	struct stack_node *current;
 	int temp;
-	int count = 0;
 
 	if(head == NULL && head->next == NULL)
 		return ;
@@ -99,12 +103,12 @@ void swap(struct stack_node *head, struct Counter* counter)
 	temp = current-> data;
 	current->data = current->next->data;
 	current->next->data = temp;
-	count++;
-	counter->value += count;
+	
+	increment(c);
 	
 }
 
-void rotate(struct stack_node **stack)
+void rotate(struct stack_node **stack, struct Counter* c)
 {
 	struct stack_node *node = *stack;
 	int data;
@@ -115,9 +119,10 @@ void rotate(struct stack_node **stack)
 	*stack = node->next;
 	free(node);
 	add_last(*stack,data);
+	increment(c);
 }
 
-void reverse_rotate(struct stack_node **stack)
+void reverse_rotate(struct stack_node **stack, struct Counter* c)
 {
 	struct stack_node *current;
 	struct stack_node *first;
@@ -135,6 +140,7 @@ void reverse_rotate(struct stack_node **stack)
 	// printf("Last value is = %d\n", data);
 
 	push(stack, data);
+	increment(c);
 }
 
 void double_print(struct stack_node *a, struct stack_node *b)
@@ -164,7 +170,7 @@ void double_print(struct stack_node *a, struct stack_node *b)
 	printf("_\t_\na\tb\n");
 }
 
-void push_b(struct stack_node **a, struct stack_node **b)
+void push_b(struct stack_node **a, struct stack_node **b, struct Counter* c)
 {
 	struct stack_node *current;
 	int data;
@@ -175,9 +181,10 @@ void push_b(struct stack_node **a, struct stack_node **b)
 	data = current->data;
 	pop(a);    
 	push(b, data);
+	increment(c);
 }
 
-void push_a(struct stack_node **b, struct stack_node **a)
+void push_a(struct stack_node **b, struct stack_node **a, struct Counter* c)
 {
 	struct  stack_node *current;
 	int     data;
@@ -188,6 +195,7 @@ void push_a(struct stack_node **b, struct stack_node **a)
 	data = current->data;
 	pop(b);
 	push(a, data);
+	increment(c);
 }
 
 int getStackSize(struct stack_node **stack)
@@ -332,59 +340,59 @@ int getLowest(struct stack_node **stack)
 	return lowest;
 }
 
-void sortThree(struct stack_node **stack)
-{
-	if (getStackSize(stack) != 3 || sorted(stack) == true)
-		return ;
-	if (getLastValue(stack) == getHighest(stack))
-	{
-		if (getSecondValue(stack) == getLowest(stack))
-		{
-			swap(*stack);
-			printf("ra\t");
-			return ;
-		}
-	}
-	if (getFirstValue(stack) == getHighest(stack))
-	{
-		if (getLastValue(stack) == getLowest(stack))
-		{
-			rotate(stack);
-			swap(*stack);
-			printf("ra\tsa\t");
-			return ;
-		}
-	}
-	if(getFirstValue(stack) == getLowest(stack))
-	{
-		if (getSecondValue(stack) == getHighest(stack))
-		{
-			reverse_rotate(stack);
-			swap(*stack);
-			printf("rra\tsa\t");
-			return;
-		}
-	}
-	if(getSecondValue(stack) == getHighest(stack))
-	{
-		if (getLastValue(stack) == getLowest(stack))
-		{
-			reverse_rotate(stack);
-			printf("rra\t");
-			return ;
-		}
-	}
-	if (getFirstValue(stack) == getHighest(stack))
-	{
-		if (getSecondValue(stack) == getLowest(stack))
-		{
-			rotate(stack);
-			printf("ra\t");
-			return ;
-		}
-	}
+// void sortThree(struct stack_node **stack)
+// {
+// 	if (getStackSize(stack) != 3 || sorted(stack) == true)
+// 		return ;
+// 	if (getLastValue(stack) == getHighest(stack))
+// 	{
+// 		if (getSecondValue(stack) == getLowest(stack))
+// 		{
+// 			swap(*stack);
+// 			printf("ra\t");
+// 			return ;
+// 		}
+// 	}
+// 	if (getFirstValue(stack) == getHighest(stack))
+// 	{
+// 		if (getLastValue(stack) == getLowest(stack))
+// 		{
+// 			rotate(stack);
+// 			swap(*stack);
+// 			printf("ra\tsa\t");
+// 			return ;
+// 		}
+// 	}
+// 	if(getFirstValue(stack) == getLowest(stack))
+// 	{
+// 		if (getSecondValue(stack) == getHighest(stack))
+// 		{
+// 			reverse_rotate(stack);
+// 			swap(*stack);
+// 			printf("rra\tsa\t");
+// 			return;
+// 		}
+// 	}
+// 	if(getSecondValue(stack) == getHighest(stack))
+// 	{
+// 		if (getLastValue(stack) == getLowest(stack))
+// 		{
+// 			reverse_rotate(stack);
+// 			printf("rra\t");
+// 			return ;
+// 		}
+// 	}
+// 	if (getFirstValue(stack) == getHighest(stack))
+// 	{
+// 		if (getSecondValue(stack) == getLowest(stack))
+// 		{
+// 			rotate(stack);
+// 			printf("ra\t");
+// 			return ;
+// 		}
+// 	}
 	
-}
+// }
 
 int getIndexPosition(struct stack_node **stack, int value)
 {
@@ -409,44 +417,44 @@ int getIndexPosition(struct stack_node **stack, int value)
 
 }
 
-void sortFive(struct stack_node **a, struct stack_node **b)
-{
-	if (getStackSize(a) != 5 || *b != NULL || sorted(a) == true)
-		return ;
+// void sortFive(struct stack_node **a, struct stack_node **b)
+// {
+// 	if (getStackSize(a) != 5 || *b != NULL || sorted(a) == true)
+// 		return ;
 
-	while (getStackSize(a) != 3)
-	{
-		while(getLowest(a) != getFirstValue(a))
-		{
-			if (getIndexPosition(a, getLowest(a)) > 3)
-			{
-				printf("rra\t");
-				reverse_rotate(a);
-			}
-			else
-			{
-				printf("ra\t");
-				rotate(a);
-			}
+// 	while (getStackSize(a) != 3)
+// 	{
+// 		while(getLowest(a) != getFirstValue(a))
+// 		{
+// 			if (getIndexPosition(a, getLowest(a)) > 3)
+// 			{
+// 				printf("rra\t");
+// 				reverse_rotate(a);
+// 			}
+// 			else
+// 			{
+// 				printf("ra\t");
+// 				rotate(a);
+// 			}
 
-		}
-		if (getLowest(a) == getFirstValue(a))
-		{
-			printf("pb\t");
-			push_b(a, b);
-		}
-	}
-	sortThree(a);
-	int test = 2;
-	while (*b != NULL)
-	{
-		printf("pa\t");
-		push_a(b, a);
-	}
-	printf("\n");				
-}
+// 		}
+// 		if (getLowest(a) == getFirstValue(a))
+// 		{
+// 			printf("pb\t");
+// 			push_b(a, b);
+// 		}
+// 	}
+// 	sortThree(a);
+// 	int test = 2;
+// 	while (*b != NULL)
+// 	{
+// 		printf("pa\t");
+// 		push_a(b, a);
+// 	}
+// 	printf("\n");				
+// }
 
-void reverseSortThree(struct stack_node **stack)
+void reverseSortThree(struct stack_node **stack, struct Counter* c)
 {
 	if (getStackSize(stack) != 3 || reverseSorted(stack) == true)
 		return ;
@@ -454,7 +462,7 @@ void reverseSortThree(struct stack_node **stack)
 	{
 		if (getSecondValue(stack) == getLowest(stack))
 		{
-			reverse_rotate(stack);
+			reverse_rotate(stack, c);
 			printf("rrb\t");
 			return ;
 		}
@@ -463,8 +471,8 @@ void reverseSortThree(struct stack_node **stack)
 	{
 		if (getLastValue(stack) == getHighest(stack))
 		{
-			rotate(stack);
-			swap(*stack);
+			rotate(stack, c);
+			swap(*stack, c);
 			printf("rb\tsb\t");
 			return ;
 		}
@@ -474,7 +482,7 @@ void reverseSortThree(struct stack_node **stack)
 		if (getSecondValue(stack) == getHighest(stack))
 		{
 			
-			rotate(stack);
+			rotate(stack, c);
 			printf("rb\t");
 			return;
 		}
@@ -483,7 +491,7 @@ void reverseSortThree(struct stack_node **stack)
 	{
 		if (getLastValue(stack) == getLowest(stack))
 		{
-			swap(*stack);
+			swap(*stack, c);
 			printf("sb\t");
 			return ;
 		}
@@ -492,8 +500,8 @@ void reverseSortThree(struct stack_node **stack)
 	{
 		if (getSecondValue(stack) == getLowest(stack))
 		{
-			reverse_rotate(stack);
-			swap(*stack);
+			reverse_rotate(stack, c);
+			swap(*stack, c);
 			printf("rrb\t");
 			return ;
 		}
@@ -502,7 +510,7 @@ void reverseSortThree(struct stack_node **stack)
 }
 
 
-void reverseSortFive(struct stack_node **a, struct stack_node **b)
+void reverseSortFive(struct stack_node **a, struct stack_node **b, struct Counter* c)
 {
 	int		counter;
 
@@ -517,27 +525,27 @@ void reverseSortFive(struct stack_node **a, struct stack_node **b)
 			if (getIndexPosition(b, getHighest(b)) > 3)
 			{
 				printf("rrb\t");
-				reverse_rotate(b);
+				reverse_rotate(b, c);
 			}
 			else
 			{
 				printf("rb\t");
-				rotate(b);
+				rotate(b, c);
 			}
 
 		}
 		if (getHighest(b) == getFirstValue(b))
 		{
 			printf("pa\t");
-			push_a(b, a);
+			push_a(b, a, c);
 		}
 	}
-	reverseSortThree(b);
+	reverseSortThree(b, c);
 	
 	while (counter-- != 0)
 	{
 		printf("pb\t");
-		push_b(a, b);
+		push_b(a, b, c);
 	}
 	printf("\n");				
 }
@@ -719,142 +727,82 @@ int *getNearestIndex(struct stack_node **a, int arr[], int begin, int end)
 
 
 
-void sortTen(struct stack_node **a, struct stack_node **b)
-{
-	int *arr;
-	int start;
-	int end;
-	if (*a == NULL || *b != NULL)
-		return ;
+// void sortTen(struct stack_node **a, struct stack_node **b)
+// {
+// 	int *arr;
+// 	int start;
+// 	int end;
+// 	if (*a == NULL || *b != NULL)
+// 		return ;
 
-	arr = createArray(a);
+// 	arr = createArray(a);
 	
-	start = 0;
-	end = getStackSize(a);
+// 	start = 0;
+// 	end = getStackSize(a);
 
-	quickSort(arr, start, (end - 1));
-	int j = 0;
-	while(j < end)
-	{
-		printf("%d ", arr[j]);
-		j++;
-	}
+// 	quickSort(arr, start, (end - 1));
+// 	int j = 0;
+// 	while(j < end)
+// 	{
+// 		printf("%d ", arr[j]);
+// 		j++;
+// 	}
 
-	// int k = 5;
-	// int n = 9;
-	// int *row;
-	// printf("\n");
-	// row = getNearestIndex(a, arr, k, n);
-	// int span = 0;
 	
-	// while (span <= n - k)
-	// {
-	// 	while (getFirstValue(a) != row[span])
-	// 		{
-	// 			if (getIndexPosition(a, row[span]) - 1 < getStackSize(a) - getIndexPosition(a, row[span]))
-	// 				rotate(a);
-	// 			else
-	// 			{
-	// 				reverse_rotate(a);
-	// 			}
-				
-	// 		}
-	// 		push_b(a, b);
-	// 		span++;
+// 	int n = getStackSize(a) - 1;
+// 	int k = n - 4;
+// 	int *row;
+// 	int span;
+// 	printf("\n");
+// 	int g = 2;
+// 	while (k >= 0)
+// 	{
 		
-	// }
-	// reverseSortFive(a, b);
-	// span = 0;
-	// while (span <= n - k)
-	// {
-	// 	push_a(b, a);
-	// 	span++;
-	// }
-
-
-	// k = 0;
-	// n = 4;
-	// printf("\n");
-	// row = getNearestIndex(a, arr, k, n);
-	// span = 0;
-	// while (span <= n - k)
-	// {
-	// 	while (getFirstValue(a) != row[span])
-	// 		{
-	// 			if (getIndexPosition(a, row[span]) - 1 < getStackSize(a) - getIndexPosition(a, row[span]))
-	// 				rotate(a);
-	// 			else
-	// 			{
-	// 				reverse_rotate(a);
-	// 			}
-				
-	// 		}
-	// 		push_b(a, b);
-	// 		span++;
+// 		row = getNearestIndex(a, arr, k, n);
+// 		span = 0;
 		
-	// }
-
-	// reverseSortFive(a, b);
-	// span = 0;
-	// while (span <= n - k)
-	// {
-	// 	push_a(b, a);
-	// 	span++;
-	// }
-	int n = getStackSize(a) - 1;
-	int k = n - 4;
-	int *row;
-	int span;
-	printf("\n");
-	int g = 2;
-	while (k >= 0)
-	{
-		
-		row = getNearestIndex(a, arr, k, n);
-		span = 0;
-		
-		while (span <= n - k)
-		{
-			while (getFirstValue(a) != row[span])
-				{
-					if (getIndexPosition(a, row[span]) - 1 < getStackSize(a) - getIndexPosition(a, row[span]))
-						rotate(a);
-					else
-					{
-						reverse_rotate(a);
-					}
+// 		while (span <= n - k)
+// 		{
+// 			while (getFirstValue(a) != row[span])
+// 				{
+// 					if (getIndexPosition(a, row[span]) - 1 < getStackSize(a) - getIndexPosition(a, row[span]))
+// 						rotate(a);
+// 					else
+// 					{
+// 						reverse_rotate(a);
+// 					}
 					
-				}
-				push_b(a, b);
-				span++;
+// 				}
+// 				push_b(a, b);
+// 				span++;
 			
-		}
-		reverseSortFive(a, b);
-		span = 0;
-		while (span <= n - k)
-		{
-			push_a(b, a);
-			span++;
-		}
-		k = k - 5;
-		n = n - 5;
-		g--;
-}
+// 		}
+// 		reverseSortFive(a, b);
+// 		span = 0;
+// 		while (span <= n - k)
+// 		{
+// 			push_a(b, a);
+// 			span++;
+// 		}
+// 		k = k - 5;
+// 		n = n - 5;
+// 		g--;
+// }
 
 
 
-	free(row);
-	free(arr);
+// 	free(row);
+// 	free(arr);
 
 
 
 
-	// getNearestIndex(a, arr, 8, 9);
-	printf("\n");
-	// printf("XX value = %d\n", getNearestIndex(a, arr, 5, 9));
-}
+// 	// getNearestIndex(a, arr, 8, 9);
+// 	printf("\n");
+// 	// printf("XX value = %d\n", getNearestIndex(a, arr, 5, 9));
+// }
 
-void sort100(struct stack_node **a, struct stack_node **b)
+void sort100(struct stack_node **a, struct stack_node **b, struct Counter* c)
 {
 	int *arr;
 	int start;
@@ -881,6 +829,7 @@ void sort100(struct stack_node **a, struct stack_node **b)
 	int span;
 	printf("\n");
 	int g = 3;
+	
 	while (k >= 0)
 	{
 		
@@ -892,21 +841,21 @@ void sort100(struct stack_node **a, struct stack_node **b)
 			while (getFirstValue(a) != row[span])
 				{
 					if (getIndexPosition(a, row[span]) - 1 < getStackSize(a) - getIndexPosition(a, row[span]))
-						rotate(a);
+						rotate(a, c);
 					else
 					{
-						reverse_rotate(a);
+						reverse_rotate(a, c);
 					}
 					
 				}
-				push_b(a, b);
+				push_b(a, b, c);
 				span++;
 		}
-		reverseSortFive(a, b);
+		reverseSortFive(a, b, c);
 		span = 0;
 		while (span <= n - k)
 		{
-			push_a(b, a);
+			push_a(b, a, c);
 			span++;
 		}
 		k = k - 5;
@@ -947,10 +896,13 @@ int* randomNumberGenarator(int size)
 
 int main()
 {
+	struct Counter c;
+	c.value = 0;
+
 	struct stack_node *a = NULL;
 	struct stack_node *b = NULL;
 	int* randomValues;
-	int size = 30;
+	int size = 100;
 	int j;
 
 	// push(&a, 1);
@@ -990,8 +942,10 @@ int main()
 	
 	double_print(a, b);
 	printf("________________________\n");
-	sort100(&a, &b);
+	sort100(&a, &b, &c);
 	double_print(a, b);
 	free(randomValues);
+	printf("\n");
+	printf("Operation count = %d\n", c.value);
 
 }

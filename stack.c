@@ -876,6 +876,97 @@ void sort100(struct stack_node **a, struct stack_node **b, struct Counter* c)
 	printf("\n");
 }
 
+void arrange_100(struct stack_node **b, int arr[], struct Counter* c)
+{
+	// if (*b != NULL)
+	// 	return;
+	int counter = 80;
+	printf("Begin arrange :  ");
+	while (counter <= 99)
+	{
+		printf(" %d",arr[counter]);
+		counter++;
+	}
+	
+}
+
+void new_strat_100(struct stack_node **a, struct stack_node **b, struct Counter* c)
+{
+	int *arr;
+	int start;
+	int end;
+	if (*a == NULL || *b != NULL)
+		return ;
+
+	arr = createArray(a);
+	
+	start = 0;
+	end = getStackSize(a);
+
+	quickSort(arr, start, (end - 1));
+	int j = 0;
+	while(j < end)
+	{
+		printf("%d ", arr[j]);
+		j++;
+	}
+
+	int n = getStackSize(a) - 1;
+	int k = n - 19;
+	int *row;
+	int span;
+	printf("\n");
+	int g = 3;
+	
+	while (k >= 80)
+	{
+		
+		row = getNearestIndex(a, arr, k, n);
+		span = 0;
+		
+		while (span <= n - k)
+		{
+			while (getFirstValue(a) != row[span])
+				{
+					if (getIndexPosition(a, row[span]) - 1 < getStackSize(a) - getIndexPosition(a, row[span]))
+						rotate(a, c);
+					else
+					{
+						reverse_rotate(a, c);
+					}
+					
+				}
+				push_b(a, b, c);
+				span++;
+		}
+		// reverseSortFive(a, b, c);
+		// span = 0;
+		// while (span <= n - k)
+		// {
+		// 	push_a(b, a, c);
+		// 	span++;
+		// }
+		k = k - 20;
+		n = n - 20;
+		g--;
+}
+	printf("\n");
+	arrange_100(b, arr, c);
+	printf("\n");
+
+	if (sorted(a) == true)
+		printf("STACK SORTED CONGRATULATIONS\n");
+	else
+		printf("TRY AGAIN\n");
+
+
+	free(row);
+	free(arr);
+
+	printf("\n");
+	
+} 
+
 int* randomNumberGenarator(int size)
 {
 	int* values;
@@ -942,7 +1033,7 @@ int main()
 	
 	double_print(a, b);
 	printf("________________________\n");
-	sort100(&a, &b, &c);
+	new_strat_100(&a, &b, &c);
 	double_print(a, b);
 	free(randomValues);
 	printf("\n");

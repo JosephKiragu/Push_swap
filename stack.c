@@ -876,18 +876,35 @@ void sort100(struct stack_node **a, struct stack_node **b, struct Counter* c)
 	printf("\n");
 }
 
-void arrange_100(struct stack_node **b, int arr[], struct Counter* c)
+void arrange_100(struct stack_node **a, struct stack_node **b, int arr[], struct Counter* c, int n)
 {
 	// if (*b != NULL)
 	// 	return;
-	int counter = 80;
-	printf("Begin arrange :  ");
-	while (counter <= 99)
+	int counter;
+	// counter = 80;
+	// printf("\n");
+	// printf("Begin arrange :  ");
+	// while (counter <= 99)
+	// {
+	// 	printf(" %d",arr[counter]);
+	// 	counter++;
+	// }
+	printf("\n");
+
+
+	counter = n;
+	while (counter >= n - 24)
 	{
-		printf(" %d",arr[counter]);
-		counter++;
+	while (getFirstValue(b) != arr[counter])
+	{
+		if (getIndexPosition(b, arr[counter]) <= 12)
+			rotate(b, c);
+		else 
+			reverse_rotate(b, c);
 	}
-	
+	push_a(b, a, c);
+	counter--;
+	}
 }
 
 void new_strat_100(struct stack_node **a, struct stack_node **b, struct Counter* c)
@@ -912,13 +929,13 @@ void new_strat_100(struct stack_node **a, struct stack_node **b, struct Counter*
 	}
 
 	int n = getStackSize(a) - 1;
-	int k = n - 19;
+	int k = n - 24;
 	int *row;
 	int span;
 	printf("\n");
 	int g = 3;
 	
-	while (k >= 80)
+	while (k >= 0)
 	{
 		
 		row = getNearestIndex(a, arr, k, n);
@@ -946,13 +963,15 @@ void new_strat_100(struct stack_node **a, struct stack_node **b, struct Counter*
 		// 	push_a(b, a, c);
 		// 	span++;
 		// }
-		k = k - 20;
-		n = n - 20;
+		arrange_100(a, b, arr, c, n);
+		k = k - 25;
+		n = n - 25;
 		g--;
-}
+		
+	}
 	printf("\n");
-	arrange_100(b, arr, c);
-	printf("\n");
+	// arrange_100(a, b, arr, c);
+	// printf("\n");
 
 	if (sorted(a) == true)
 		printf("STACK SORTED CONGRATULATIONS\n");
@@ -973,7 +992,7 @@ int* randomNumberGenarator(int size)
 	int value;
 
 	// srand(time(NULL));
-	srand(1);
+	srand(time(NULL));
 	values = malloc(size * sizeof(int));
 	for (int i = 0; i < size; i++)
 	{

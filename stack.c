@@ -984,7 +984,103 @@ void new_strat_100(struct stack_node **a, struct stack_node **b, struct Counter*
 
 	printf("\n");
 	
-} 
+}
+
+void arrange_500(struct stack_node **a, struct stack_node **b, int arr[], struct Counter* c, int n)
+{
+	int counter;
+	printf("\n");
+
+
+	counter = n;
+	while (counter >= n - 49)
+	{
+	while (getFirstValue(b) != arr[counter])
+	{
+		if (getIndexPosition(b, arr[counter]) <= 25)
+			rotate(b, c);
+		else 
+			reverse_rotate(b, c);
+	}
+	push_a(b, a, c);
+	counter--;
+	}
+}
+
+void new_strat_500(struct stack_node **a, struct stack_node **b, struct Counter* c)
+{
+	int *arr;
+	int start;
+	int end;
+	if (*a == NULL || *b != NULL)
+		return ;
+
+	arr = createArray(a);
+	
+	start = 0;
+	end = getStackSize(a);
+
+	quickSort(arr, start, (end - 1));
+	int j = 0;
+	while(j < end)
+	{
+		printf("%d ", arr[j]);
+		j++;
+	}
+
+	int n = getStackSize(a) - 1;
+	int k = n - 49;
+	int *row;
+	int span;
+	printf("\n");
+	int g = 3;
+	
+	while (k >= 0)
+	{
+		
+		row = getNearestIndex(a, arr, k, n);
+		span = 0;
+		
+		while (span <= n - k)
+		{
+			while (getFirstValue(a) != row[span])
+				{
+					if (getIndexPosition(a, row[span]) - 1 < getStackSize(a) - getIndexPosition(a, row[span]))
+						rotate(a, c);
+					else
+					{
+						reverse_rotate(a, c);
+					}
+					
+				}
+				push_b(a, b, c);
+				if (getStackSize(b) > 1)
+				{
+					if (getFirstValue(b) < getSecondValue(b))
+						swap(*b, c);
+				}
+				span++;
+		}
+		arrange_500(a, b, arr, c, n);
+		k = k - 50;
+		n = n - 50;
+		g--;
+		
+	}
+	printf("\n");
+
+	if (sorted(a) == true)
+		printf("STACK SORTED CONGRATULATIONS\n");
+	else
+		printf("TRY AGAIN\n");
+
+
+	free(row);
+	free(arr);
+
+	printf("\n");
+	
+}
 
 int* randomNumberGenarator(int size)
 {
@@ -1012,7 +1108,7 @@ int main()
 	struct stack_node *a = NULL;
 	struct stack_node *b = NULL;
 	int* randomValues;
-	int size = 100;
+	int size = 500;
 	int j;
 
 	// push(&a, 1);
@@ -1048,11 +1144,10 @@ int main()
 		push(&a, randomValues[j]);
 		j++;
 	}
-	
-	
+
 	double_print(a, b);
 	printf("________________________\n");
-	new_strat_100(&a, &b, &c);
+	new_strat_500(&a, &b, &c);
 	double_print(a, b);
 	free(randomValues);
 	printf("\n");

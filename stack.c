@@ -997,7 +997,7 @@ void arrange_500(struct stack_node **a, struct stack_node **b, int arr[], struct
 	{
 	while (getFirstValue(b) != arr[counter])
 	{
-		if (getIndexPosition(b, arr[counter]) <= 25)
+		if (getIndexPosition(b, arr[counter]) <= getStackSize(b) / 2 + 1)
 			rotate(b, c);
 		else 
 			reverse_rotate(b, c);
@@ -1005,6 +1005,127 @@ void arrange_500(struct stack_node **a, struct stack_node **b, int arr[], struct
 	push_a(b, a, c);
 	counter--;
 	}
+}
+
+int scan_b(struct stack_node **b, int n)
+{
+	struct stack_node *current;
+	int index;
+
+	current = *b;
+	while (current->next != NULL)
+	{
+		if (n < current->data)
+			break;
+		else
+			current = current->next;
+	}
+	// printf("index position = %d\n", current->data);
+	return current->data;
+}
+
+void strat_b_500(struct stack_node **a, struct stack_node **b, struct Counter* c)
+{
+	int *arr;
+	int start;
+	int end;
+	int scanned;
+	if (*a == NULL || *b != NULL)
+		return ;
+
+	arr = createArray(a);
+	
+	start = 0;
+	end = getStackSize(a);
+
+	quickSort(arr, start, (end - 1));
+	int j = 0;
+	while(j < end)
+	{
+		printf("%d ", arr[j]);
+		j++;
+	}
+
+	int n = getStackSize(a) - 1;
+	int k = n - 49;
+	int *row;
+	int span;
+	printf("\n");
+	int g = 3;
+	
+	while (k >= 350)
+	{
+		
+		row = getNearestIndex(a, arr, k, n);
+		span = 0;
+		
+		while (span <= n - k)
+		{
+			while (getFirstValue(a) != row[span])
+				{
+					if (getIndexPosition(a, row[span]) - 1 < getStackSize(a) - getIndexPosition(a, row[span]))
+						rotate(a, c);
+					else
+					{
+						reverse_rotate(a, c);
+					}
+					
+				}
+				if (getStackSize(b) > 1)
+				{
+					if (getFirstValue(a) > getHighest(b) || getFirstValue(a) < getLowest(b))
+						{
+							while (getFirstValue(b) != getLowest(b))
+							{
+								if (getIndexPosition(b, getLowest(b)) > getStackSize(b) / 2 + 1)
+									reverse_rotate(b,c);
+								else
+									rotate(b, c);
+
+							}
+							push_b(a, b, c);
+						}
+						else
+						{
+							while (getFirstValue(b) != scan_b(b, getFirstValue(a)))
+							{
+								if (getIndexPosition(b, scan_b(b, getFirstValue(a))) > getStackSize(b) / 2 + 1)
+									reverse_rotate(b, c);
+								else
+									rotate(b, c);
+							}
+							push_b(a, b, c);
+						}
+						
+				}
+				else 
+					push_b(a, b, c);
+				// if (getStackSize(b) > 1)
+				// {
+				// 	if (getFirstValue(b) < getSecondValue(b))
+				// 		swap(*b, c);
+				// }
+				span++;
+		}
+		arrange_500(a, b, arr, c, n);
+		k = k - 50;
+		n = n - 50;
+		g--;
+		
+	}
+	printf("\n");
+
+	if (sorted(a) == true)
+		printf("STACK SORTED CONGRATULATIONS\n");
+	else
+		printf("TRY AGAIN\n");
+
+
+	free(row);
+	free(arr);
+
+	printf("\n");
+	
 }
 
 void new_strat_500(struct stack_node **a, struct stack_node **b, struct Counter* c)
@@ -1035,7 +1156,7 @@ void new_strat_500(struct stack_node **a, struct stack_node **b, struct Counter*
 	printf("\n");
 	int g = 3;
 	
-	while (k >= 0)
+	while (k >= 450)
 	{
 		
 		row = getNearestIndex(a, arr, k, n);
@@ -1054,14 +1175,14 @@ void new_strat_500(struct stack_node **a, struct stack_node **b, struct Counter*
 					
 				}
 				push_b(a, b, c);
-				if (getStackSize(b) > 1)
-				{
-					if (getFirstValue(b) < getSecondValue(b))
-						swap(*b, c);
-				}
+				// if (getStackSize(b) > 1)
+				// {
+				// 	if (getFirstValue(b) < getSecondValue(b))
+				// 		swap(*b, c);
+				// }
 				span++;
 		}
-		arrange_500(a, b, arr, c, n);
+		// arrange_500(a, b, arr, c, n);
 		k = k - 50;
 		n = n - 50;
 		g--;
@@ -1111,8 +1232,8 @@ int main()
 	int size = 500;
 	int j;
 
-	// push(&a, 1);
 	// push(&a, 32);
+	// push(&a,1);
 	// push(&a, -3);
 	// push(&a, -500);
 	// push(&a, 8);
@@ -1147,7 +1268,8 @@ int main()
 
 	double_print(a, b);
 	printf("________________________\n");
-	new_strat_500(&a, &b, &c);
+	// new_strat_500(&a, &b, &c);
+	strat_b_500(&a, &b, &c);
 	double_print(a, b);
 	free(randomValues);
 	printf("\n");

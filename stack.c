@@ -1015,7 +1015,7 @@ int scan_b(struct stack_node **b, int n)
 	current = *b;
 	while (current->next != NULL)
 	{
-		if (n < current->data)
+		if (n <= current->data)
 			break;
 		else
 			current = current->next;
@@ -1053,7 +1053,7 @@ void strat_b_500(struct stack_node **a, struct stack_node **b, struct Counter* c
 	printf("\n");
 	int g = 3;
 	
-	while (k >= 350)
+	while (k >= 450)
 	{
 		
 		row = getNearestIndex(a, arr, k, n);
@@ -1063,17 +1063,17 @@ void strat_b_500(struct stack_node **a, struct stack_node **b, struct Counter* c
 		{
 			while (getFirstValue(a) != row[span])
 				{
-					if (getIndexPosition(a, row[span]) - 1 < getStackSize(a) - getIndexPosition(a, row[span]))
+					// if (getIndexPosition(a, row[span]) - 1 < getStackSize(a) - getIndexPosition(a, row[span]))
+					if (getIndexPosition(a, row[span]) < getStackSize(a) / 2 + 1)
 						rotate(a, c);
 					else
 					{
 						reverse_rotate(a, c);
 					}
-					
 				}
 				if (getStackSize(b) > 1)
 				{
-					if (getFirstValue(a) > getHighest(b) || getFirstValue(a) < getLowest(b))
+					if (getFirstValue(a) >= getHighest(b) || getFirstValue(a) <= getLowest(b))
 						{
 							while (getFirstValue(b) != getLowest(b))
 							{
@@ -1085,7 +1085,7 @@ void strat_b_500(struct stack_node **a, struct stack_node **b, struct Counter* c
 							}
 							push_b(a, b, c);
 						}
-						else
+					else
 						{
 							while (getFirstValue(b) != scan_b(b, getFirstValue(a)))
 							{
@@ -1107,7 +1107,7 @@ void strat_b_500(struct stack_node **a, struct stack_node **b, struct Counter* c
 				// }
 				span++;
 		}
-		arrange_500(a, b, arr, c, n);
+		// arrange_500(a, b, arr, c, n);
 		k = k - 50;
 		n = n - 50;
 		g--;
@@ -1172,7 +1172,6 @@ void new_strat_500(struct stack_node **a, struct stack_node **b, struct Counter*
 					{
 						reverse_rotate(a, c);
 					}
-					
 				}
 				push_b(a, b, c);
 				// if (getStackSize(b) > 1)
@@ -1219,6 +1218,48 @@ int* randomNumberGenarator(int size)
 	return values;
 }
 
+void sort_a_to_b(struct stack_node **a, struct stack_node **b, struct Counter* c)
+{
+	while (getStackSize(a) > 1)
+		{
+			printf("I AM HERE \n");
+			push_b(a, b, c);
+			// if (getStackSize(b) > 1)
+			// 	{
+			// 		if (getFirstValue(a) >= getHighest(b) || getFirstValue(a) <= getLowest(b))
+			// 			{
+			// 				while (getFirstValue(b) != getLowest(b))
+			// 				{
+			// 					if (getIndexPosition(b, getLowest(b)) > getStackSize(b) / 2 + 1)
+			// 						reverse_rotate(b,c);
+			// 					else
+			// 						rotate(b, c);
+
+			// 				}
+			// 				push_b(a, b, c);
+			// 			}
+			// 		else
+			// 			{
+			// 				// while (getFirstValue(b) != scan_b(b, getFirstValue(a)))
+			// 				// {
+			// 				// 	if (getIndexPosition(b, scan_b(b, getFirstValue(a))) > getStackSize(b) / 2 + 1)
+			// 				// 		reverse_rotate(b, c);
+			// 				// 	else
+			// 				// 		rotate(b, c);
+			// 				// }
+			// 				push_b(a, b, c);
+			// 			}
+						
+			// 	}
+			// 	else
+			// 	{
+			// 		push_b(a, b, c);
+			// 	}
+					
+			
+		}
+}
+
 
 
 int main()
@@ -1232,10 +1273,10 @@ int main()
 	int size = 500;
 	int j;
 
-	// push(&a, 32);
-	// push(&a,1);
-	// push(&a, -3);
-	// push(&a, -500);
+	push(&a, 32);
+	push(&a,1);
+	push(&a, -3);
+	push(&a, -500);
 	// push(&a, 8);
 	// push(&a, 9);
 	// push(&a, 20000);
@@ -1258,18 +1299,19 @@ int main()
 	// push(&a, 621);
 	// push(&a, 565);
 	
-	randomValues = randomNumberGenarator(size);
-	j = 0;
-	while(j < size)
-	{
-		push(&a, randomValues[j]);
-		j++;
-	}
+	// randomValues = randomNumberGenarator(size);
+	// j = 0;
+	// while(j < size)
+	// {
+	// 	push(&a, randomValues[j]);
+	// 	j++;
+	// }
 
 	double_print(a, b);
 	printf("________________________\n");
 	// new_strat_500(&a, &b, &c);
-	strat_b_500(&a, &b, &c);
+	// strat_b_500(&a, &b, &c);
+	sort_a_to_b(&a, &b, &c);
 	double_print(a, b);
 	free(randomValues);
 	printf("\n");

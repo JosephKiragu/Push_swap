@@ -198,22 +198,26 @@ void push_a(struct stack_node **b, struct stack_node **a, struct Counter* c)
 	increment(c);
 }
 
-int getStackSize(struct stack_node **stack)
+int *getStackSize(struct stack_node **stack)
 {
 	struct  stack_node *current;
 	int     counter;
+	int		*count;
 	
 	current = *stack;
 	counter = 0;
+	count = malloc(sizeof(int));
 	if (current == NULL)
-		return 1;
+		return NULL;
 	while(current != NULL)
 	{
 		current = current->next;
 		counter++;
 	}
 	// printf("Size = %d\n", counter);
-	return counter;
+	count[0] = counter;
+	// free(count);
+	return count;
 }
 
 bool sorted(struct stack_node **stack)
@@ -260,15 +264,16 @@ bool reverseSorted(struct stack_node **stack)
 	return true;
 }
 
-int getFirstValue(struct stack_node **stack)
+int *getFirstValue(struct stack_node **stack)
 {
 	struct  stack_node *current;
-	int     value;
+	int     *value;
 
 	current = *stack;
+	value = malloc(sizeof(int));
 	if(current == NULL)
-		return 1;
-	value = current->data;
+		return 0;
+	value[0] = current->data;
 	// printf("Value = %d\n", value);
 	return value;
 
@@ -353,7 +358,7 @@ int getLowest(struct stack_node **stack)
 // 			return ;
 // 		}
 // 	}
-// 	if (getFirstValue(stack) == getHighest(stack))
+// 	if (*getFirstValue(stack) == getHighest(stack))
 // 	{
 // 		if (getLastValue(stack) == getLowest(stack))
 // 		{
@@ -363,7 +368,7 @@ int getLowest(struct stack_node **stack)
 // 			return ;
 // 		}
 // 	}
-// 	if(getFirstValue(stack) == getLowest(stack))
+// 	if(*getFirstValue(stack) == getLowest(stack))
 // 	{
 // 		if (getSecondValue(stack) == getHighest(stack))
 // 		{
@@ -382,7 +387,7 @@ int getLowest(struct stack_node **stack)
 // 			return ;
 // 		}
 // 	}
-// 	if (getFirstValue(stack) == getHighest(stack))
+// 	if (*getFirstValue(stack) == getHighest(stack))
 // 	{
 // 		if (getSecondValue(stack) == getLowest(stack))
 // 		{
@@ -424,7 +429,7 @@ int getIndexPosition(struct stack_node **stack, int value)
 
 // 	while (getStackSize(a) != 3)
 // 	{
-// 		while(getLowest(a) != getFirstValue(a))
+// 		while(getLowest(a) != *getFirstValue(a))
 // 		{
 // 			if (getIndexPosition(a, getLowest(a)) > 3)
 // 			{
@@ -438,7 +443,7 @@ int getIndexPosition(struct stack_node **stack, int value)
 // 			}
 
 // 		}
-// 		if (getLowest(a) == getFirstValue(a))
+// 		if (getLowest(a) == *getFirstValue(a))
 // 		{
 // 			printf("pb\t");
 // 			push_b(a, b);
@@ -456,7 +461,7 @@ int getIndexPosition(struct stack_node **stack, int value)
 
 void reverseSortThree(struct stack_node **stack, struct Counter* c)
 {
-	if (getStackSize(stack) != 3 || reverseSorted(stack) == true)
+	if (*getStackSize(stack) != 3 || reverseSorted(stack) == true)
 		return ;
 	if (getLastValue(stack) == getHighest(stack))
 	{
@@ -467,7 +472,7 @@ void reverseSortThree(struct stack_node **stack, struct Counter* c)
 			return ;
 		}
 	}
-	if (getFirstValue(stack) == getLowest(stack))
+	if (*getFirstValue(stack) == getLowest(stack))
 	{
 		if (getLastValue(stack) == getHighest(stack))
 		{
@@ -477,7 +482,7 @@ void reverseSortThree(struct stack_node **stack, struct Counter* c)
 			return ;
 		}
 	}
-	if(getFirstValue(stack) == getLowest(stack))
+	if(*getFirstValue(stack) == getLowest(stack))
 	{
 		if (getSecondValue(stack) == getHighest(stack))
 		{
@@ -496,7 +501,7 @@ void reverseSortThree(struct stack_node **stack, struct Counter* c)
 			return ;
 		}
 	}
-	if (getFirstValue(stack) == getHighest(stack))
+	if (*getFirstValue(stack) == getHighest(stack))
 	{
 		if (getSecondValue(stack) == getLowest(stack))
 		{
@@ -518,9 +523,9 @@ void reverseSortFive(struct stack_node **a, struct stack_node **b, struct Counte
 	if (reverseSorted(b) == true)
 		return ;
 
-	while (getStackSize(b) > 3)
+	while (*getStackSize(b) > 3)
 	{
-		while(getHighest(b) != getFirstValue(b))
+		while(getHighest(b) != *getFirstValue(b))
 		{
 			if (getIndexPosition(b, getHighest(b)) > 3)
 			{
@@ -534,7 +539,7 @@ void reverseSortFive(struct stack_node **a, struct stack_node **b, struct Counte
 			}
 
 		}
-		if (getHighest(b) == getFirstValue(b))
+		if (getHighest(b) == *getFirstValue(b))
 		{
 			printf("pa\t");
 			push_a(b, a, c);
@@ -561,7 +566,7 @@ int *createArray(struct stack_node **a)
 		return NULL;
 	
 	j = 0;
-	arr = malloc(getStackSize(a) * sizeof(int));
+	arr = malloc(*getStackSize(a) * sizeof(int));
 	while(current != NULL)
 		{
 			arr[j] = current->data;
@@ -651,7 +656,7 @@ int *getIndexValue(struct stack_node **a, int index)
 
 	current = *a;
 	counter = 1;
-	if (index > getStackSize(a))
+	if (index > *getStackSize(a))
 		return NULL;
 	while (current != NULL)
 	{
@@ -763,7 +768,7 @@ int *getNearestIndex(struct stack_node **a, int arr[], int begin, int end)
 		
 // 		while (span <= n - k)
 // 		{
-// 			while (getFirstValue(a) != row[span])
+// 			while (*getFirstValue(a) != row[span])
 // 				{
 // 					if (getIndexPosition(a, row[span]) - 1 < getStackSize(a) - getIndexPosition(a, row[span]))
 // 						rotate(a);
@@ -813,7 +818,7 @@ void sort100(struct stack_node **a, struct stack_node **b, struct Counter* c)
 	arr = createArray(a);
 	
 	start = 0;
-	end = getStackSize(a);
+	end = *getStackSize(a);
 
 	quickSort(arr, start, (end - 1));
 	int j = 0;
@@ -823,7 +828,7 @@ void sort100(struct stack_node **a, struct stack_node **b, struct Counter* c)
 		j++;
 	}
 
-	int n = getStackSize(a) - 1;
+	int n = *getStackSize(a) - 1;
 	int k = n - 4;
 	int *row;
 	int span;
@@ -838,9 +843,9 @@ void sort100(struct stack_node **a, struct stack_node **b, struct Counter* c)
 		
 		while (span <= n - k)
 		{
-			while (getFirstValue(a) != row[span])
+			while (*getFirstValue(a) != row[span])
 				{
-					if (getIndexPosition(a, row[span]) - 1 < getStackSize(a) - getIndexPosition(a, row[span]))
+					if (getIndexPosition(a, row[span]) - 1 < *getStackSize(a) - getIndexPosition(a, row[span]))
 						rotate(a, c);
 					else
 					{
@@ -895,7 +900,7 @@ void arrange_100(struct stack_node **a, struct stack_node **b, int arr[], struct
 	counter = n;
 	while (counter >= n - 24)
 	{
-	while (getFirstValue(b) != arr[counter])
+	while (*getFirstValue(b) != arr[counter])
 	{
 		if (getIndexPosition(b, arr[counter]) <= 12)
 			rotate(b, c);
@@ -918,7 +923,7 @@ void new_strat_100(struct stack_node **a, struct stack_node **b, struct Counter*
 	arr = createArray(a);
 	
 	start = 0;
-	end = getStackSize(a);
+	end = *getStackSize(a);
 
 	quickSort(arr, start, (end - 1));
 	int j = 0;
@@ -928,7 +933,7 @@ void new_strat_100(struct stack_node **a, struct stack_node **b, struct Counter*
 		j++;
 	}
 
-	int n = getStackSize(a) - 1;
+	int n = *getStackSize(a) - 1;
 	int k = n - 24;
 	int *row;
 	int span;
@@ -943,9 +948,9 @@ void new_strat_100(struct stack_node **a, struct stack_node **b, struct Counter*
 		
 		while (span <= n - k)
 		{
-			while (getFirstValue(a) != row[span])
+			while (*getFirstValue(a) != row[span])
 				{
-					if (getIndexPosition(a, row[span]) - 1 < getStackSize(a) - getIndexPosition(a, row[span]))
+					if (getIndexPosition(a, row[span]) - 1 < *getStackSize(a) - getIndexPosition(a, row[span]))
 						rotate(a, c);
 					else
 					{
@@ -995,9 +1000,9 @@ void arrange_500(struct stack_node **a, struct stack_node **b, int arr[], struct
 	counter = n;
 	while (counter >= n - 49)
 	{
-	while (getFirstValue(b) != arr[counter])
+	while (*getFirstValue(b) != arr[counter])
 	{
-		if (getIndexPosition(b, arr[counter]) <= getStackSize(b) / 2 + 1)
+		if (getIndexPosition(b, arr[counter]) <= *getStackSize(b) / 2 + 1)
 			rotate(b, c);
 		else 
 			reverse_rotate(b, c);
@@ -1036,7 +1041,7 @@ void strat_b_500(struct stack_node **a, struct stack_node **b, struct Counter* c
 	arr = createArray(a);
 	
 	start = 0;
-	end = getStackSize(a);
+	end = *getStackSize(a);
 
 	quickSort(arr, start, (end - 1));
 	int j = 0;
@@ -1046,7 +1051,7 @@ void strat_b_500(struct stack_node **a, struct stack_node **b, struct Counter* c
 		j++;
 	}
 
-	int n = getStackSize(a) - 1;
+	int n = *getStackSize(a) - 1;
 	int k = n - 49;
 	int *row;
 	int span;
@@ -1061,23 +1066,23 @@ void strat_b_500(struct stack_node **a, struct stack_node **b, struct Counter* c
 		
 		while (span <= n - k)
 		{
-			while (getFirstValue(a) != row[span])
+			while (*getFirstValue(a) != row[span])
 				{
 					// if (getIndexPosition(a, row[span]) - 1 < getStackSize(a) - getIndexPosition(a, row[span]))
-					if (getIndexPosition(a, row[span]) < getStackSize(a) / 2 + 1)
+					if (getIndexPosition(a, row[span]) < *getStackSize(a) / 2 + 1)
 						rotate(a, c);
 					else
 					{
 						reverse_rotate(a, c);
 					}
 				}
-				if (getStackSize(b) > 1)
+				if (*getStackSize(b) > 1)
 				{
-					if (getFirstValue(a) >= getHighest(b) || getFirstValue(a) <= getLowest(b))
+					if (*getFirstValue(a) >= getHighest(b) || *getFirstValue(a) <= getLowest(b))
 						{
-							while (getFirstValue(b) != getLowest(b))
+							while (*getFirstValue(b) != getLowest(b))
 							{
-								if (getIndexPosition(b, getLowest(b)) > getStackSize(b) / 2 + 1)
+								if (getIndexPosition(b, getLowest(b)) > *getStackSize(b) / 2 + 1)
 									reverse_rotate(b,c);
 								else
 									rotate(b, c);
@@ -1087,9 +1092,9 @@ void strat_b_500(struct stack_node **a, struct stack_node **b, struct Counter* c
 						}
 					else
 						{
-							while (getFirstValue(b) != scan_b(b, getFirstValue(a)))
+							while (*getFirstValue(b) != scan_b(b, *getFirstValue(a)))
 							{
-								if (getIndexPosition(b, scan_b(b, getFirstValue(a))) > getStackSize(b) / 2 + 1)
+								if (getIndexPosition(b, scan_b(b, *getFirstValue(a))) > *getStackSize(b) / 2 + 1)
 									reverse_rotate(b, c);
 								else
 									rotate(b, c);
@@ -1102,7 +1107,7 @@ void strat_b_500(struct stack_node **a, struct stack_node **b, struct Counter* c
 					push_b(a, b, c);
 				// if (getStackSize(b) > 1)
 				// {
-				// 	if (getFirstValue(b) < getSecondValue(b))
+				// 	if (*getFirstValue(b) < getSecondValue(b))
 				// 		swap(*b, c);
 				// }
 				span++;
@@ -1139,7 +1144,7 @@ void new_strat_500(struct stack_node **a, struct stack_node **b, struct Counter*
 	arr = createArray(a);
 	
 	start = 0;
-	end = getStackSize(a);
+	end = *getStackSize(a);
 
 	quickSort(arr, start, (end - 1));
 	int j = 0;
@@ -1149,7 +1154,7 @@ void new_strat_500(struct stack_node **a, struct stack_node **b, struct Counter*
 		j++;
 	}
 
-	int n = getStackSize(a) - 1;
+	int n = *getStackSize(a) - 1;
 	int k = n - 49;
 	int *row;
 	int span;
@@ -1164,9 +1169,9 @@ void new_strat_500(struct stack_node **a, struct stack_node **b, struct Counter*
 		
 		while (span <= n - k)
 		{
-			while (getFirstValue(a) != row[span])
+			while (*getFirstValue(a) != row[span])
 				{
-					if (getIndexPosition(a, row[span]) - 1 < getStackSize(a) - getIndexPosition(a, row[span]))
+					if (getIndexPosition(a, row[span]) - 1 < *getStackSize(a) - getIndexPosition(a, row[span]))
 						rotate(a, c);
 					else
 					{
@@ -1176,7 +1181,7 @@ void new_strat_500(struct stack_node **a, struct stack_node **b, struct Counter*
 				push_b(a, b, c);
 				// if (getStackSize(b) > 1)
 				// {
-				// 	if (getFirstValue(b) < getSecondValue(b))
+				// 	if (*getFirstValue(b) < getSecondValue(b))
 				// 		swap(*b, c);
 				// }
 				span++;
@@ -1220,44 +1225,51 @@ int* randomNumberGenarator(int size)
 
 void sort_a_to_b(struct stack_node **a, struct stack_node **b, struct Counter* c)
 {
-	while (getStackSize(a) > 1)
+	int check = 0;
+	while (getStackSize(a) != NULL)
 		{
-			printf("I AM HERE \n");
-			push_b(a, b, c);
-			// if (getStackSize(b) > 1)
-			// 	{
-			// 		if (getFirstValue(a) >= getHighest(b) || getFirstValue(a) <= getLowest(b))
-			// 			{
-			// 				while (getFirstValue(b) != getLowest(b))
-			// 				{
-			// 					if (getIndexPosition(b, getLowest(b)) > getStackSize(b) / 2 + 1)
-			// 						reverse_rotate(b,c);
-			// 					else
-			// 						rotate(b, c);
+			// push_b(a, b, c);
+			printf("STACK SIZE OF A =%d \n", *getStackSize(a));
+			if (*getStackSize(b) >= 2)
+				{
+					printf("*getFirstValue = %d AND GetHighest = %d\n", *getFirstValue(a), getHighest(a));
+					if (*getFirstValue(a) >= getHighest(b) || *getFirstValue(a) <= getLowest(b))
+						{
+							// printf("NIKO HAPA\n");
+							while (*getFirstValue(b) <= getLowest(b))
+							{
+								printf("NIKO HAPA\n");
+								if (getIndexPosition(b, getLowest(b)) > *getStackSize(b) / 2 + 1)
+									reverse_rotate(b,c);
+								else
+									rotate(b, c);
 
-			// 				}
-			// 				push_b(a, b, c);
-			// 			}
-			// 		else
-			// 			{
-			// 				// while (getFirstValue(b) != scan_b(b, getFirstValue(a)))
-			// 				// {
-			// 				// 	if (getIndexPosition(b, scan_b(b, getFirstValue(a))) > getStackSize(b) / 2 + 1)
-			// 				// 		reverse_rotate(b, c);
-			// 				// 	else
-			// 				// 		rotate(b, c);
-			// 				// }
-			// 				push_b(a, b, c);
-			// 			}
+							}
+							push_b(a, b, c);
+						}
+					else
+						{
+							while (*getFirstValue(b) != scan_b(b, *getFirstValue(a)))
+							{
+								if (getIndexPosition(b, scan_b(b, *getFirstValue(a))) > *getStackSize(b) / 2 + 1)
+									reverse_rotate(b, c);
+								else
+									rotate(b, c);
+							}
+							push_b(a, b, c);
+						}
 						
-			// 	}
-			// 	else
-			// 	{
-			// 		push_b(a, b, c);
-			// 	}
-					
+				}
+				else
+				{
+					push_b(a, b, c);
+				}
+
+			// push_b(a, b, c);
+			check++;	
 			
 		}
+
 }
 
 
@@ -1273,11 +1285,11 @@ int main()
 	int size = 500;
 	int j;
 
-	push(&a, 32);
-	push(&a,1);
+	// push(&a, 1000);
+	push(&a,679);
 	push(&a, -3);
-	push(&a, -500);
-	// push(&a, 8);
+	push(&a, -120);
+	// push(&b, 8);
 	// push(&a, 9);
 	// push(&a, 20000);
 	// push(&a, 21);
@@ -1312,6 +1324,8 @@ int main()
 	// new_strat_500(&a, &b, &c);
 	// strat_b_500(&a, &b, &c);
 	sort_a_to_b(&a, &b, &c);
+	// printf("The lowest variable is = %d\n", getHighest(&b));
+	
 	double_print(a, b);
 	free(randomValues);
 	printf("\n");

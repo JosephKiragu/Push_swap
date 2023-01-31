@@ -1230,13 +1230,13 @@ void sort_a_to_b(struct stack_node **a, struct stack_node **b, struct Counter* c
 		{
 			// push_b(a, b, c);
 			printf("STACK SIZE OF A =%d \n", *getStackSize(a));
-			if (*getStackSize(b) >= 2)
+			if (getStackSize(b) != NULL && *getStackSize(b) >= 2)
 				{
-					printf("*getFirstValue = %d AND GetHighest = %d\n", *getFirstValue(a), getHighest(a));
+					printf("*getFirstValue(a) = %d AND GetHighest(b) = %d AND GetLowest(b) = %d\n", *getFirstValue(a), getHighest(b), getLowest(b));
 					if (*getFirstValue(a) >= getHighest(b) || *getFirstValue(a) <= getLowest(b))
 						{
 							// printf("NIKO HAPA\n");
-							while (*getFirstValue(b) <= getLowest(b))
+							while (*getFirstValue(b) != getLowest(b))
 							{
 								printf("NIKO HAPA\n");
 								if (getIndexPosition(b, getLowest(b)) > *getStackSize(b) / 2 + 1)
@@ -1289,14 +1289,14 @@ int main()
 	push(&a,679);
 	push(&a, -3);
 	push(&a, -120);
-	// push(&b, 8);
-	// push(&a, 9);
+	push(&b, 8);
+	push(&a,-9);
 	// push(&a, 20000);
 	// push(&a, 21);
-	// push(&a, 30);
-	// push(&a, 0);
+	push(&a, 30);
+	push(&a, 0);
 	// push(&a, 100);
-	// push(&a, -25);
+	push(&a, -25);
 	// push(&a, 2210);
 	// push(&a, 31);
 	// push(&a, 90);
@@ -1324,10 +1324,10 @@ int main()
 	// new_strat_500(&a, &b, &c);
 	// strat_b_500(&a, &b, &c);
 	sort_a_to_b(&a, &b, &c);
-	// printf("The lowest variable is = %d\n", getHighest(&b));
+	// printf("The lowest variable is = %d\n", getHighest(&b)); 
 	
 	double_print(a, b);
-	free(randomValues);
+	// free(randomValues);
 	printf("\n");
 	printf("Operation count = %d\n", c.value);
 
